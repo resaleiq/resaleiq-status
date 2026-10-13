@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Resale IQ status</title><meta name="description" content="Live uptime for resaleiq.dev and its API.">
+<style>body{font:16px/1.5 system-ui,sans-serif;max-width:720px;margin:40px auto;padding:0 16px;color:#111}
+h1{font-size:1.5rem}.row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #e5e5e5}
+.up{color:#0a7a3d;font-weight:600}.down{color:#b3261e;font-weight:600}.bars{display:flex;gap:2px;margin:4px 0 12px}
+.bars i{flex:1;height:24px;border-radius:2px;background:#0a7a3d}.bars i.p{background:#d9a400}.bars i.x{background:#b3261e}.bars i.n{background:#ddd}
+small{color:#555}a{color:#0b57d0}</style></head><body>
+<h1>Resale IQ status</h1><p id="s">Loading…</p><div id="c"></div><h2>Recent incidents</h2><div id="i"><small>None recorded.</small></div>
+<p><small>Probed from outside our servers every 5 minutes. <a href="https://resaleiq.dev">Back to resaleiq.dev</a></small></p>
+<nav aria-label="Legal and contact" style="margin-top:32px;padding-top:16px;border-top:1px solid #e5e5e5;line-height:2"><small><a href="https://resaleiq.dev/legal">Legal notice</a> · <a href="https://resaleiq.dev/privacy">Privacy</a> · <a href="https://resaleiq.dev/terms">Terms</a> · <a href="https://resaleiq.dev/contact">Contact</a> · <a href="https://resaleiq.dev/refund">Refunds</a></small></nav>
+<script>
+fetch('status.json?'+Date.now()).then(r=>r.json()).then(d=>{
+ const cs=Object.entries(d.components),all=cs.every(([,c])=>c.up);
+ document.getElementById('s').innerHTML=all?'<span class=up>All systems operational</span>':'<span class=down>Service disruption</span>';
+ document.getElementById('s').innerHTML+=' <small>Last checked '+new Date(d.checked_at).toLocaleString()+'</small>';
+ const today=new Date();let h='';
+ for(const [n,c] of cs){let bars='',ok=0,tot=0;
+  for(let k=89;k>=0;k--){const t=new Date(today-k*864e5).toISOString().slice(0,10),v=c.days[t];
+   if(!v){bars+='<i class=n title="'+t+': no data"></i>';continue}ok+=v.ok;tot+=v.total;const r=v.ok/v.total;
+   bars+='<i class="'+(r==1?'':r>.9?'p':'x')+'" title="'+t+': '+(r*100).toFixed(2)+'%"></i>'}
+  h+='<div class=row><b>'+n+'</b><span class='+(c.up?'up':'down')+'>'+(c.up?'Operational':'Down')+' · '+c.ms+' ms</span></div><div class=bars>'+bars+'</div><small>'+(tot?(ok/tot*100).toFixed(2):'–')+'% over 90 days</small>';}
+ document.getElementById('c').innerHTML=h;
+ if(d.incidents.length)document.getElementById('i').innerHTML=d.incidents.slice(0,10).map(x=>'<div class=row><span>'+x.component+' ('+x.code+')</span><small>'+x.start.slice(0,16).replace('T',' ')+' UTC'+(x.end?' → '+x.end.slice(11,16):' (ongoing)')+'</small></div>').join('');
+}).catch(()=>document.getElementById('s').textContent='Status data unavailable.');
+</script></body></html>
