@@ -4,9 +4,10 @@
 h1{font-size:1.5rem}.row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #e5e5e5}
 .up{color:#0a7a3d;font-weight:600}.down{color:#b3261e;font-weight:600}.bars{display:flex;gap:2px;margin:4px 0 12px}
 .bars i{flex:1;height:24px;border-radius:2px;background:#0a7a3d}.bars i.p{background:#d9a400}.bars i.x{background:#b3261e}.bars i.n{background:#ddd}
-small{color:#555}a{color:#0b57d0}</style></head><body>
+footer{margin-top:32px;padding-top:12px;border-top:1px solid #e5e5e5;line-height:2}small{color:#555}a{color:#0b57d0}</style></head><body>
 <h1>Resale IQ status</h1><p id="s">Loading…</p><div id="c"></div><h2>Recent incidents</h2><div id="i"><small>None recorded.</small></div>
 <p><small>Probed from outside our servers every 5 minutes. <a href="https://resaleiq.dev">Back to resaleiq.dev</a></small></p>
+<footer><small><a href="https://resaleiq.dev/legal">Legal notice</a> &middot; <a href="https://resaleiq.dev/privacy">Privacy</a> &middot; <a href="https://resaleiq.dev/terms">Terms</a> &middot; <a href="https://resaleiq.dev/contact">Contact</a> &middot; <a href="https://resaleiq.dev/refund">Refunds</a></small></footer>
 <script>
 fetch('status.json?'+Date.now()).then(r=>r.json()).then(d=>{
  const cs=Object.entries(d.components),all=cs.every(([,c])=>c.up);
