@@ -10,6 +10,6 @@ External uptime probe and public status page (status.resaleiq.dev).
 
 ## Scheduler (RES-67)
 `bin/dev.resaleiq.status-probe.plist` is the launchd job (every 300 s, through `with-secrets.sh`). Install:
-`cp bin/dev.resaleiq.status-probe.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/dev.resaleiq.status-probe.plist`.
+`sed "s#__HOME__#$HOME#g" bin/dev.resaleiq.status-probe.plist > ~/Library/LaunchAgents/dev.resaleiq.status-probe.plist && launchctl load ~/Library/LaunchAgents/dev.resaleiq.status-probe.plist` (the file in the repo is a template: `__HOME__` stands for the home directory of the machine that runs the probe).
 If neither the live Pages `status.json` nor the local copy is readable, the probe exits 2 and publishes nothing
 (set `ALLOW_EMPTY_HISTORY=1` only for a deliberate first run).
